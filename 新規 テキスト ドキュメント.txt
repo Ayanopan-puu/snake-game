@@ -1,0 +1,3 @@
+  ctx.fillRext(obj.xGRID, obj.yGRID, GRID -2, GRID -2);
+
+  ctx.fillRext(this.x * GRID, this.y * GRID, GRID, GRID);
