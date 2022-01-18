@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Snake</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+    <style>
+      #stage {
+        display: grid;
+        grid-template-columns: repeat(10, 30px);
+        grid-template-rows: repeat(10, 30px);
+        grid-gap: 1px;
+        justify-content: center;
+      }
+      .cell {
+        background: rgb(176, 177, 175);
+      }
+      .cell.body {
+        background: rgb(96, 226, 148);
+      }
+      .cell.fruit {
+        background: rgb(245, 101, 190);
+      }
+      .cell.head {
+        background: rgb(46, 104, 69);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" style="text-align: -webkit-center">
+      <p>SCORE: {{ score }}</p>
+      <div id="stage">
+        <div
+          class="cell"
+          v-for="i in stage_cells_count"
+          :class="{
+head: snake_head_index === i - 1,
+body: snake.body_indexes.includes(i - 1),
+fruit: fruit_index === i - 1,
+}"
+        ></div>
+      </div>
+
+      <p v-if="is_gameover">
+        GAME OVER<br />
+        <button onclick="location.reload()">RETRY</button>
+      </p>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+
+        data: {
+          stage_side_length: 10,
+          fruit_index: 0,
+
+          // ヘビに関するデータ
+          snake: {
+            // 頭の座標
+            head_pos: {
+              x: 1,
+              y: 3,
+            },
+
+            speed: 400,
+            direction: "↑",
+            body_length: 1,
+            body_indexes: [],
+          },
+        },
+
+        created() {
+          this.randomize_fruit_index();
+          document.addEventListener("keydown", this.on_keydown);
+          this.time_goes();
+        },
+
+        watch: {
+          snake_head_index(newValue) {
+            if (newValue === this.fruit_index) {
+              this.snake.body_length++; // 体長+1
+              this.randomize_fruit_index();
+            }
+          },
+        },
+
+        computed: {
+          stage_cells_count() {
+            return this.stage_side_length * this.stage_side_length;
+          },
+          snake_head_index() {
+            if (this.is_frameout) return null;
+            return (
+              this.snake.head_pos.y * this.stage_side_length +
+              this.snake.head_pos.x
+            );
+          },
+
+          // スコアを計算する
+          score() {
+            return this.snake.body_length - 1;
+          },
+          is_frameout() {
+            const { x, y } = this.snake.head_pos;
+            return (
+              x < 0 ||
+              this.stage_side_length <= x ||
+              y < 0 ||
+              this.stage_side_length <= y
+            );
+          },
+          is_collided() {
+            return this.snake.body_indexes.includes(this.snake_head_index);
+          },
+          is_gameover() {
+            return this.is_collided || this.is_frameout;
+          },
+        },
+
+        methods: {
+          time_goes() {
+            if (this.is_gameover) return;
+
+            this.forward_snake();
+            setTimeout(this.time_goes, this.snake.speed);
+          },
+          forward_snake() {
+            if (this.snake.body_indexes.length >= this.snake.body_length) {
+              this.snake.body_indexes.shift();
+            }
+            if (this.snake.body_indexes.length < this.snake.body_length) {
+              this.snake.body_indexes.push(this.snake_head_index);
+            }
+
+            switch (this.snake.direction) {
+              case "←":
+                this.snake.head_pos.x--;
+                break;
+              case "↑":
+                this.snake.head_pos.y--;
+                break;
+              case "→":
+                this.snake.head_pos.x++;
+                break;
+              case "↓":
+                this.snake.head_pos.y++;
+                break;
+            }
+          },
+          on_keydown(event) {
+            switch (event.key) {
+              case "ArrowUp":
+                this.snake.direction = "↑";
+                break;
+              case "ArrowRight":
+                this.snake.direction = "→";
+                break;
+              case "ArrowDown":
+                this.snake.direction = "↓";
+                break;
+              case "ArrowLeft":
+                this.snake.direction = "←";
+                break;
+            }
+          },
+
+          randomize_fruit_index() {
+            this.fruit_index = Math.floor(
+              Math.random() * this.stage_cells_count
+            );
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
