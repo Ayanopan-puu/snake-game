@@ -34,6 +34,9 @@ javascriptを使って簡易的なゲームを作ってみました。
 リセットの条件は大きくなった体にぶつかってしまった場合のみ
 
 
+https://user-images.githubusercontent.com/89112624/150567895-e4ee4275-bd30-48b2-a184-d4cdd85393da.mp4
+
+
 ### ２．ＳＣＯＲＥをいれてゲーム性を高める
 スコアをつけてみました。
 
@@ -54,3 +57,4 @@ https://user-images.githubusercontent.com/89112624/150567240-b29ecf95-1002-4c90-
 
 
 ### javascript
+
