@@ -41,6 +41,9 @@ javascriptを使って簡易的なゲームを作ってみました。
 リセットの条件は壁にぶつかること・体にぶつかること
 
 
+https://user-images.githubusercontent.com/89112624/150567240-b29ecf95-1002-4c90-b68e-78e6f516de4b.mp4
+
+
 # 使用技術
 
 
