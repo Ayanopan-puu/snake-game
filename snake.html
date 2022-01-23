@@ -2,80 +2,114 @@
 <html>
   <body>
     <script>
+      //canvas...グラフィックを描写できる
       const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = 400;
-      canvas.height = 400;
+      const ctx = canvas.getContext('2d');//2Dグラフィックを描画
+      canvas.width = 400;//幅
+      canvas.height = 400;//高さ
 
+      //setAttribute...属性の追加
       canvas.setAttribute(
         'style',
         'display:block;margin:auto;background-color: #aaa'
       );
 
+      //要素をbodyに追加
       document.body.appendChild(canvas);
 
+      //グリッドのマス目20px
       const GRID = 20;
-
+      //縦20×横20
       const STAGE = canvas.width / GRID;
 
+      //ヘビ
       const snake = {
+        //座標
         x: null,
         y: null,
         dx: 1,
         dy: 0,
         tail: null,
 
+        //ヘビの描画
         update: function () {
+          //現在地の座標をbodyの配列の中に入れる
           this.body.push({ x: this.x, y: this.y });
           this.x += this.dx;
           this.y += this.dy;
 
           ctx.fillStyle = 'green';
+          //bodyの中身を一つずつ取り出して描画をする
           this.body.forEach(obj => {
+            //四角形の描画
             ctx.fillRect(obj.x*GRID, obj.y*GRID, GRID -2, GRID -2);
-            if(this.x === obj.x && this.y === obj.y) init();
+
+            //現在のヘビの位置とヘビのbodyのどこかが当たった場合
+            if(this.x === obj.x && this.y === obj.y)
+            //...最初の画面に戻る
+            init();
           })
+
           if (this.body.length > this.tail) this.body.shift();
         }
       }
+
+      //アイテム
       const item = {
         x: null,
         y: null,
 
         update: function () {
           ctx.fillStyle = 'red';
+          //四角形の描画
           ctx.fillRect(this.x * GRID, this.y * GRID, GRID, GRID);
         },
       }
+
+      //初期化処理
       const init = () => {
+        //ゲームが始まった瞬間の位置
+        //画面の中央に表示
         snake.x = STAGE / 2;
         snake.y = STAGE / 2;
         snake.tail = 4;
+        //ヘビのマスをbodyの配列で管理する
         snake.body = [];
 
+        //乱数を生成する
         item.x = Math.floor(Math.random() * STAGE);
         item.y = Math.floor(Math.random() * STAGE);
       }
+
+      //ループ処理
       const loop = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         snake.update();
         item.update();
 
+        //ヘビが画面端にいった場合、画面内に戻ってくる処理
         if(snake.x < 0)     snake.x = STAGE-1;
         if(snake.y < 0)     snake.y = STAGE-1;
         if(snake.x > STAGE-1) snake.x = 0;
         if(snake.y > STAGE-1) snake.y = 0;
 
+        //アイテムを食べて大きくなる処理...ヘビ=アイテムで重なった時
         if (snake.x === item.x && snake.y === item.y) {
           snake.tail++;
+          //食べたらアイテムをランダムな位置に移動させる
           item.x = Math.floor(Math.random() * STAGE);
           item.y = Math.floor(Math.random() * STAGE);
         }
       }
+
+      //初期化処理実行
       init();
+
+      //ループ処理実行（一定間隔で処理の実行）...1秒間に15回描画処理をする
       setInterval(loop, 1000 / 15);
 
+      //キーボードの入力処理
       document.addEventListener('keydown', e => {
         switch (e.key) {
           case 'ArrowLeft':
