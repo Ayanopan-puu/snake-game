@@ -36,6 +36,12 @@ javascriptを使って簡易的なゲームを作ってみました。
 
 https://user-images.githubusercontent.com/89112624/150567895-e4ee4275-bd30-48b2-a184-d4cdd85393da.mp4
 
+### URL
+
+
+https://wonderful-wilson-9be45b.netlify.app/snake
+
+
 
 ### ２．ＳＣＯＲＥをいれてゲーム性を高める
 スコアをつけてみました。
@@ -45,6 +51,12 @@ https://user-images.githubusercontent.com/89112624/150567895-e4ee4275-bd30-48b2-
 
 
 https://user-images.githubusercontent.com/89112624/150567240-b29ecf95-1002-4c90-b68e-78e6f516de4b.mp4
+
+### URL
+
+
+https://wonderful-wilson-9be45b.netlify.app/snake2
+
 
 
 # 使用技術
